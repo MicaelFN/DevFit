@@ -1,123 +1,119 @@
-import React from 'react';
-import styled from 'styled-components/native'
-import {Text} from 'react-native';
-import {connect} from 'react-redux';
+import React, { useState } from 'react';
+import { Text, Button } from 'react-native';
+import { connect } from 'react-redux';
+import styled from 'styled-components/native';
+import { setWorkoutDays } from '../actions/userActions';
 import DefaultButton from '../components/DefaultButton';
 
 const Container = styled.SafeAreaView`
     flex:1;
-    /* justify-content:center; */
     align-items:center;
-    margin-left:30px;
-    margin-right:30px;
-    margin-top:50px;
+    background-color:#FFF;
+    margin:50px 30px 0px 30px;
 `;
-const HeaderText =styled.Text`
+
+const HeaderText = styled.Text`
     font-size:15px;
     color:#333;
-    margin-bottom:50px;
     text-align:center;
+    margin-bottom:30px;
 `;
-const BoldText = styled.Text`
-    font-weight:bold;
-`;
+
 const DaysArea = styled.View`
     flex-direction:row;
     flex-wrap:wrap;
     justify-content:space-between;
 `;
 
-const NextButton = styled.Button``;
-
-const Page = (props) => {
+const NextButton = (props) => {
 
     const nextAction = () => {
-        if(!props.name){
-            alert('Voce precisa digitar um nome!');
-            return
+        if(!props.navigation.state.params || !props.navigation.state.params.days.length) {
+            alert("Você precisa treinar pelo menos 1 dia");
+            return;
         }
-        props.navigation.navigate('StarterDias');
+        props.navigation.navigate('StarterNivel');
     }
 
-    const toggleDay = (d) => {
-        let newWorkoutDays = [...props.workoutDays];
-        if(!props.workoutDays.includes(d)){
-            newWorkoutDays.push(d);
-            
-        }else{
-            newWorkoutDays = newWorkoutDays.filter(i=>i!=d);
-        }
-        props.setWorkoutDays(newWorkoutDays);
-        props.navigation.setParams({workoutDays:newWorkoutDays})
-    }
-
-    let firstName = props.name.split(' ')[0] // pega apenas a string antes do pimeiro espaço
-
-    return(
-        
-        <Container>
-           <HeaderText>Olá, <BoldText>{firstName}</BoldText>, tudo bem?</HeaderText>
-           <HeaderText>Quais dias da semana você pretende treinar?</HeaderText>
-
-           <DaysArea>
-               <DefaultButton bgcolor={props.workoutDays.includes(0)?'#AAA':false} onPress={()=>toggleDay(0)} width={100} style={{marginBottom:20}}>
-                   <Text>Domingo</Text>
-               </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(1)?'#AAA':false} onPress={()=>toggleDay(1)} width={100} style={{marginBottom:20}}>
-                   <Text>Segunda</Text>
-               </DefaultButton >
-               <DefaultButton bgcolor={props.workoutDays.includes(2)?'#AAA':false} onPress={()=>toggleDay(2)} width={100} style={{marginBottom:20}}>
-                   <Text>Terça</Text>
-               </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(3)?'#AAA':false} onPress={()=>toggleDay(3)} width={100} style={{marginBottom:20}}>
-                   <Text>Quarta</Text>
-               </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(4)?'#AAA':false} onPress={()=>toggleDay(4)} width={100} style={{marginBottom:20}}>
-                   <Text>Quinta</Text>
-               </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(5)?'#AAA':false} onPress={()=>toggleDay(5)} width={100} style={{marginBottom:20}}>
-                   <Text>Sexta</Text>
-               </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(6)?'#AAA':false} onPress={()=>toggleDay(6)} width={100} style={{marginBottom:20}}>
-                   <Text>Sábado</Text>
-               </DefaultButton>
-           </DaysArea>
-           
-        </Container>
+    return (
+        <Button title="Próximo" onPress={nextAction} />
     );
 }
 
-Page.navigationOptions = ({navigation}) => {
+const Page = (props) => {
 
-    const nextAction = () => {
-        if(!navigation.state.params || !navigation.state.params.workoutDays.length){
-            alert('Você precisa selecionar pelo menos um dia!');
-            return
+    const [days, setDays] = useState([]);
+
+    const addDay = (d) => {
+        let newDays = [...days];
+        if(!newDays.includes(d)) {
+            newDays.push(d);
+        } else {
+            newDays = newDays.filter(i=>i!=d);
         }
-        navigation.navigate('StarterNível')
+        setDays(newDays);
+
+        props.setWorkoutDays(newDays);
+        props.navigation.setParams({days:newDays});
     }
-    return{
+
+    let firstName = props.name.split(' ')[0];
+
+    return (
+        <Container>
+            <HeaderText>Opa <Text style={{fontWeight:'bold'}}>{firstName}</Text>, tudo bem?</HeaderText>
+            <HeaderText>Quais <Text style={{fontWeight:'bold'}}>dias da semana</Text> você pretende treinar?</HeaderText>
+
+            <DaysArea>
+                <DefaultButton onPress={()=>addDay(1)} bgcolor={days.includes(1)?'#a5e8bc':false} width={100} style={{marginBottom:20}} underlayColor="#CCC">
+                    <Text>Segunda</Text>
+                </DefaultButton>
+                <DefaultButton onPress={()=>addDay(2)} bgcolor={days.includes(2)?'#a5e8bc':false} width={100} style={{marginBottom:20}} underlayColor="#CCC">
+                    <Text>Terça</Text>
+                </DefaultButton>
+                <DefaultButton onPress={()=>addDay(3)} bgcolor={days.includes(3)?'#a5e8bc':false} width={100} style={{marginBottom:20}} underlayColor="#CCC">
+                    <Text>Quarta</Text>
+                </DefaultButton>
+                <DefaultButton onPress={()=>addDay(4)} bgcolor={days.includes(4)?'#a5e8bc':false} width={100} style={{marginBottom:20}} underlayColor="#CCC">
+                    <Text>Quinta</Text>
+                </DefaultButton>
+                <DefaultButton onPress={()=>addDay(5)} bgcolor={days.includes(5)?'#a5e8bc':false} width={100} style={{marginBottom:20}} underlayColor="#CCC">
+                    <Text>Sexta</Text>
+                </DefaultButton>
+                <DefaultButton onPress={()=>addDay(6)} bgcolor={days.includes(6)?'#a5e8bc':false} width={100} style={{marginBottom:20}} underlayColor="#CCC">
+                    <Text>Sábado</Text>
+                </DefaultButton>
+                <DefaultButton onPress={()=>addDay(0)} bgcolor={days.includes(0)?'#a5e8bc':false} width={100} style={{marginBottom:20}} underlayColor="#CCC">
+                    <Text>Domingo</Text>
+                </DefaultButton>
+            </DaysArea>
+
+            <HeaderText>Você pode alterar isso a qualquer momento.</HeaderText>
+            
+        </Container>
+    );
+};
+
+Page.navigationOptions = ({navigation}) => {
+    return {
         title:'',
-        headerRight: <NextButton title='Proximo' onPress={nextAction} />,
+        headerRight:<NextButton navigation={navigation} />,
         headerRightContainerStyle:{
             marginRight:10
         }
-    }
-    //header:null
+    };
 }
 
 const mapStateToProps = (state) => {
-    return{
-        name:state.useReducer.name,
-        workoutDays:state.useReducer.workoutDays
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return{
-        setName:(name)=>dispatch({type:'SET_NAME', payload:{name}}),
-        setWorkoutDays:(workoutDays) => dispatch({type:'SET_WORKOUTDAYS', payload:{workoutDays}})
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Page);
+    return {
+      name: state.userReducer.name
+    };
+  };
+  
+  const mapDispatchToProps = (dispatch) => {
+    return {
+        setWorkoutDays:(workoutDays)=> setWorkoutDays(workoutDays, dispatch)
+    };
+  };
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(Page);

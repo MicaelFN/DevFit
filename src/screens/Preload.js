@@ -1,40 +1,25 @@
-import {StackActions, NavigationActions} from 'react-navigation';
-import {connect} from  'react-redux';
-
+import { StackActions, NavigationActions } from 'react-navigation';
+import { connect } from 'react-redux';
 
 const Preload = (props) => {
+  if(!props.name) {
     props.navigation.dispatch(StackActions.reset({
-        index:0,
-        actions:[
-            NavigationActions.navigate({routeName:'StarterStack'})
-        ]
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'StarterStack' })]
     }));
-
-    /* if(!props.name){
-        //mandar para StarterStack
-        props.Navigation.dispatch(StackActions.reset({
-            index:0,
-            actions:[
-                NavigationActions.navigate({routeName:'StarterStack'})
-            ]
-        }));
-    }else{
-        //mandar para apptab
-        props.Navigation.dispatch(StackActions.reset({
-            index:0,
-            actions:[
-                NavigationActions.navigate({routeName:'AppTab'})
-            ]
-        }));
-    } */
-
-    return null;
-}
+  } else {
+    props.navigation.dispatch(StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'AppTab' })]
+    }));
+  }
+  return null;
+};
 
 const mapStateToProps = (state) => {
-    return {
-        name:state.useReducer.name
-    };
-}
+  return {
+    name: state.userReducer.name
+  };
+};
 
 export default connect(mapStateToProps)(Preload);

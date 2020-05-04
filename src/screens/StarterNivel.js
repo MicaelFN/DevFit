@@ -1,123 +1,117 @@
-import React from 'react';
-import styled from 'styled-components/native'
-import {Text} from 'react-native';
-import {connect} from 'react-redux';
+import React, { useState } from 'react';
+import { Text, Button } from 'react-native';
+import { connect } from 'react-redux';
+import styled from 'styled-components/native';
+import { setLevel } from '../actions/userActions';
 import DefaultButton from '../components/DefaultButton';
 
 const Container = styled.SafeAreaView`
     flex:1;
-    /* justify-content:center; */
     align-items:center;
-    margin-left:30px;
-    margin-right:30px;
-    margin-top:50px;
+    background-color:#FFF;
+    margin:50px 30px 0px 30px;
 `;
-const HeaderText =styled.Text`
+
+const HeaderText = styled.Text`
     font-size:15px;
     color:#333;
-    margin-bottom:50px;
     text-align:center;
-`;
-const BoldText = styled.Text`
-    font-weight:bold;
-`;
-const DaysArea = styled.View`
-    flex-direction:row;
-    flex-wrap:wrap;
-    justify-content:space-between;
+    margin-bottom:30px;
 `;
 
-const NextButton = styled.Button``;
+const LevelArea = styled.View`
+    width:100%;
+`;
 
-const Page = (props) => {
+const NextButton = (props) => {
 
     const nextAction = () => {
-        if(!props.name){
-            alert('Voce precisa digitar um nome!');
-            return
+        if(!props.navigation.state.params || !props.navigation.state.params.level) {
+            alert("Você precisa dizer seu nível");
+            return;
         }
-        props.navigation.navigate('StarterDias');
+        props.navigation.navigate('StarterRecommendations');
     }
 
-    const toggleDay = (d) => {
-        let newWorkoutDays = [...props.workoutDays];
-        if(!props.workoutDays.includes(d)){
-            newWorkoutDays.push(d);
-            
-        }else{
-            newWorkoutDays = newWorkoutDays.filter(i=>i!=d);
-        }
-        props.setWorkoutDays(newWorkoutDays);
-        props.navigation.setParams({workoutDays:newWorkoutDays})
-    }
-
-    let firstName = props.name.split(' ')[0] // pega apenas a string antes do pimeiro espaço
-
-    return(
-        
-        <Container>
-           <HeaderText>Olá, <BoldText>{firstName}</BoldText>, tudo bem?</HeaderText>
-           <HeaderText>Nível</HeaderText>
-
-           <DaysArea>
-               <DefaultButton bgcolor={props.workoutDays.includes(0)?'#AAA':false} onPress={()=>toggleDay(0)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
-                   <Text>Domingo</Text>
-               </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(1)?'#AAA':false} onPress={()=>toggleDay(1)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
-                   <Text>Segunda</Text>
-               </DefaultButton >
-               <DefaultButton bgcolor={props.workoutDays.includes(2)?'#AAA':false} onPress={()=>toggleDay(2)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
-                   <Text>Terça</Text>
-               </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(3)?'#AAA':false} onPress={()=>toggleDay(3)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
-                   <Text>Quarta</Text>
-               </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(4)?'#AAA':false} onPress={()=>toggleDay(4)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
-                   <Text>Quinta</Text>
-               </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(5)?'#AAA':false} onPress={()=>toggleDay(5)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
-                   <Text>Sexta</Text>
-               </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(6)?'#AAA':false} onPress={()=>toggleDay(6)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
-                   <Text>Sábado</Text>
-               </DefaultButton>
-           </DaysArea>
-           
-        </Container>
+    return (
+        <Button title="Próximo" onPress={nextAction} />
     );
 }
 
-Page.navigationOptions = ({navigation}) => {
-
-    const nextAction = () => {
-        if(!navigation.state.params || !navigation.state.params.workoutDays.lenth){
-            alert('Você precisa selecionar pelo menos um dia!');
-            return
-        }
-        navigation.navigate('StarterNível')
+const Page = (props) => {
+    let funnyPhrase = '';
+    switch(props.workoutDays.length) {
+        case 1:
+            funnyPhrase = "Só 1 dia não vai adiantar muito, mas...";
+            break;
+        case 2:
+            funnyPhrase = "2 Dias eu acho pouco, mas quem sou eu pra te julgar?";
+            break;
+        case 3:
+            funnyPhrase = "Legal, 3 dias dá pro gasto...";
+            break;
+        case 4:
+            funnyPhrase = "Legal, 4 dias vai ser TOP!";
+            break;
+        case 5:
+            funnyPhrase = "É isso aí, 5 dias é o mínimo, lets GO!";
+            break;
+        case 6:
+            funnyPhrase = "É, 6 dias não é pra todo mundo...";
+            break;
+        case 7:
+            funnyPhrase = "WoooW! Todo dia?! WTF?!";
+            break;
     }
-    return{
+
+    const setMyLevel = (l) => {
+        props.setLevel(l);
+        props.navigation.setParams({level:l});
+    }
+
+    return (
+        <Container>
+            <HeaderText style={{fontWeight:'bold'}}>{funnyPhrase}</HeaderText>
+            <HeaderText>Qual seu nível hoje?</HeaderText>
+
+            <LevelArea>
+                <DefaultButton onPress={()=>setMyLevel('beginner')} bgcolor={props.level=='beginner'?'#a5e8bc':false} style={{marginBottom:20}} underlayColor="#CCC">
+                    <Text>Iniciante / Um frago</Text>
+                </DefaultButton>
+                <DefaultButton onPress={()=>setMyLevel('intermediate')} bgcolor={props.level=='intermediate'?'#a5e8bc':false} style={{marginBottom:20}} underlayColor="#CCC">
+                    <Text>Intermediário / Me viro bem</Text>
+                </DefaultButton>
+                <DefaultButton onPress={()=>setMyLevel('advanced')} bgcolor={props.level=='advanced'?'#a5e8bc':false} style={{marginBottom:20}} underlayColor="#CCC">
+                    <Text>Avançado / Primo do The Rock</Text>
+                </DefaultButton>
+            </LevelArea>
+
+            <HeaderText>Você pode alterar isso a qualquer momento.</HeaderText>
+        </Container>
+    );
+};
+
+Page.navigationOptions = ({navigation}) => {
+    return {
         title:'',
-        headerRight: <NextButton title='Proximo' onPress={nextAction} />,
+        headerRight:<NextButton navigation={navigation} />,
         headerRightContainerStyle:{
             marginRight:10
         }
-    }
-    //header:null
+    };
 }
 
 const mapStateToProps = (state) => {
-    return{
-        name:state.useReducer.name,
-        workoutDays:state.useReducer.workoutDays
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return{
-        setName:(name)=>dispatch({type:'SET_NAME', payload:{name}}),
-        setWorkoutDays:(workoutDays) => dispatch({type:'SET_WORKOUTDAYS', payload:{workoutDays}})
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Page);
+    return {
+        workoutDays: state.userReducer.workoutDays,
+        level: state.userReducer.level
+    };
+  };
+  
+  const mapDispatchToProps = (dispatch) => {
+    return {
+        setLevel:(level)=> setLevel(level, dispatch)
+    };
+  };
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(Page);
