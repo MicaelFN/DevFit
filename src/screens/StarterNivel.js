@@ -57,28 +57,28 @@ const Page = (props) => {
         
         <Container>
            <HeaderText>Olá, <BoldText>{firstName}</BoldText>, tudo bem?</HeaderText>
-           <HeaderText>Quais dias da semana você pretende treinar?</HeaderText>
+           <HeaderText>Nível</HeaderText>
 
            <DaysArea>
-               <DefaultButton bgcolor={props.workoutDays.includes(0)?'#AAA':false} onPress={()=>toggleDay(0)} width={100} style={{marginBottom:20}}>
+               <DefaultButton bgcolor={props.workoutDays.includes(0)?'#AAA':false} onPress={()=>toggleDay(0)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
                    <Text>Domingo</Text>
                </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(1)?'#AAA':false} onPress={()=>toggleDay(1)} width={100} style={{marginBottom:20}}>
+               <DefaultButton bgcolor={props.workoutDays.includes(1)?'#AAA':false} onPress={()=>toggleDay(1)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
                    <Text>Segunda</Text>
                </DefaultButton >
-               <DefaultButton bgcolor={props.workoutDays.includes(2)?'#AAA':false} onPress={()=>toggleDay(2)} width={100} style={{marginBottom:20}}>
+               <DefaultButton bgcolor={props.workoutDays.includes(2)?'#AAA':false} onPress={()=>toggleDay(2)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
                    <Text>Terça</Text>
                </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(3)?'#AAA':false} onPress={()=>toggleDay(3)} width={100} style={{marginBottom:20}}>
+               <DefaultButton bgcolor={props.workoutDays.includes(3)?'#AAA':false} onPress={()=>toggleDay(3)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
                    <Text>Quarta</Text>
                </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(4)?'#AAA':false} onPress={()=>toggleDay(4)} width={100} style={{marginBottom:20}}>
+               <DefaultButton bgcolor={props.workoutDays.includes(4)?'#AAA':false} onPress={()=>toggleDay(4)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
                    <Text>Quinta</Text>
                </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(5)?'#AAA':false} onPress={()=>toggleDay(5)} width={100} style={{marginBottom:20}}>
+               <DefaultButton bgcolor={props.workoutDays.includes(5)?'#AAA':false} onPress={()=>toggleDay(5)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
                    <Text>Sexta</Text>
                </DefaultButton>
-               <DefaultButton bgcolor={props.workoutDays.includes(6)?'#AAA':false} onPress={()=>toggleDay(6)} width={100} style={{marginBottom:20}}>
+               <DefaultButton bgcolor={props.workoutDays.includes(6)?'#AAA':false} onPress={()=>toggleDay(6)} width={100} style={{marginBottom:20}} underlayColor="#CCC">
                    <Text>Sábado</Text>
                </DefaultButton>
            </DaysArea>
@@ -90,7 +90,7 @@ const Page = (props) => {
 Page.navigationOptions = ({navigation}) => {
 
     const nextAction = () => {
-        if(!navigation.state.params || !navigation.state.params.workoutDays.length){
+        if(!navigation.state.params || !navigation.state.params.workoutDays.lenth){
             alert('Você precisa selecionar pelo menos um dia!');
             return
         }

@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { TouchableHighlight } from 'react-native-gesture-handler'
+import { TouchableHighlight } from 'react-native'
 
 
 
